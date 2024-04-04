@@ -1,0 +1,49 @@
+{
+    "name": "digitaltunnel/hyperpay",
+    "description": "A Global Standard in Online Payments, for fast-growing businesses in the MENA region.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "role": "Developer",
+            "name": "Hossam Monir ( Digital Tunnel )",
+            "email": "hey@digitaltunnel.net",
+            "homepage": "https://digitaltunnel.net/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "DigitalTunnel\\HyperPay\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DigitalTunnel\\HyperPay\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^10.0|^11.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0",
+        "pestphp/pest": "^2.34"
+    },
+    "extra": {
+        "laravel": {
+            "aliases": {
+                "HyperPay": "DigitalTunnel\\HyperPay\\Facades\\HyperPay"
+            }
+        }
+    }
+}
