@@ -5,8 +5,8 @@ namespace DigitalTunnel\HyperPay\Services;
 use DigitalTunnel\HyperPay\Data\CustomerData;
 use DigitalTunnel\HyperPay\Enums\PaymentMethod;
 use DigitalTunnel\HyperPay\Exceptions\InvalidPaymentMethod;
+use DigitalTunnel\HyperPay\Helpers\Amount;
 use Exception;
-use Illuminate\Support\Number;
 
 class HyperPay
 {
@@ -87,7 +87,7 @@ class HyperPay
      */
     public function setAmount(string $amount): self
     {
-        $this->amount = Number::format($amount, maxPrecision: 2);
+        $this->amount = Amount::format($amount);
 
         return $this;
     }
