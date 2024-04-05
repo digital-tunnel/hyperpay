@@ -39,7 +39,7 @@ class Backoffice extends HyperPay implements BackofficeInterface
      * set currency to ['config'].
      * optional, if not set, the default currency will be used.
      */
-    public function setCurrency(string $currency = null): static
+    public function setCurrency(?string $currency = null): static
     {
         $this->config['currency'] = $currency;
 
@@ -85,16 +85,13 @@ class Backoffice extends HyperPay implements BackofficeInterface
      */
     private function response(array $response): array
     {
-        return [
-            'response' => $response,
-            'props' => [
-                'payment_method' => $this->config['payment_method'],
-                'test_mode' => $this->isTestMode,
-                'status' => [
-                    'success' => $this->validateStatus($response['result']['code']),
-                    'message' => $response['result']['description'],
-                ],
-            ],
+        $default = [
+            'payment_method' => $this->config['payment_method'],
+            'test_mode' => $this->isTestMode,
+            'success' => $this->validateStatus($response['result']['code']),
+            'message' => $response['result']['description'],
         ];
+
+        return collect($response)->merge($default)->toArray();
     }
 }

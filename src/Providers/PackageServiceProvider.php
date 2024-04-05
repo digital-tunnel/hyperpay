@@ -24,7 +24,7 @@ class PackageServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__.'/config/hyperpay.php' => config_path('hyperpay.php'),
+            __DIR__.'../config/hyperpay.php' => config_path('hyperpay.php'),
         ]);
 
         $loader = AliasLoader::getInstance();

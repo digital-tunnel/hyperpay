@@ -7,6 +7,7 @@ use DigitalTunnel\HyperPay\Contracts\HyperPay;
 use DigitalTunnel\HyperPay\Interfaces\CheckoutInterface;
 use DigitalTunnel\HyperPay\Traits\Processor;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Number;
 
 class PrepareCheckout extends HyperPay implements CheckoutInterface
 {
@@ -94,7 +95,7 @@ class PrepareCheckout extends HyperPay implements CheckoutInterface
     {
         $this->withTokenization();
 
-        return $this->process();
+        return $this->responseHandler();
     }
 
     /**
@@ -104,7 +105,7 @@ class PrepareCheckout extends HyperPay implements CheckoutInterface
     {
         $this->withOneClick();
 
-        return $this->process();
+        return $this->responseHandler();
     }
 
     /**
@@ -114,13 +115,13 @@ class PrepareCheckout extends HyperPay implements CheckoutInterface
     {
         $this->withBasic();
 
-        return $this->process();
+        return $this->responseHandler();
     }
 
     /**
      * process checkout request.
      */
-    private function process(): array
+    private function responseHandler(): array
     {
         return $this->response(
             response: $this->PrepareCheckout(),
@@ -132,22 +133,17 @@ class PrepareCheckout extends HyperPay implements CheckoutInterface
      */
     private function response(array $response): array
     {
-        return [
-            'response' => $response,
-            'props' => [
-                'merchant_transaction_id' => $this->config['merchantTransactionId'],
-                'payment_method' => $this->config['payment_method'],
-                'test_mode' => $this->isTestMode,
-                'endpoint' => $this->endpoint,
-                'script_url' => isset($response['id']) ? $this->endpoint.'/v1/paymentWidgets.js?checkoutId='.$response['id'] : null,
-                'currency' => $this->config['currency'],
-                'amount' => $this->config['amount'],
-                'status' => [
-                    'success' => $this->validateCheckout($response['result']['code']),
-                    'message' => $response['result']['description'],
-                ],
-            ],
+        $default = [
+            'merchant_transaction_id' => $this->config['merchantTransactionId'],
+            'payment_method' => $this->config['payment_method'],
+            'test_mode' => $this->isTestMode,
+            'endpoint' => $this->endpoint,
+            'script_url' => isset($response['id']) ? $this->endpoint.'/v1/paymentWidgets.js?checkoutId='.$response['id'] : null,
+            'currency' => $this->config['currency'],
+            'amount' => $this->config['amount'],
+            'success' => $this->validateCheckout($response['result']['code']),
         ];
+        return collect($response)->merge($default)->toArray();
     }
 
     /**

@@ -2,10 +2,10 @@
 
 namespace DigitalTunnel\HyperPay\Services;
 
-use Exception;
 use DigitalTunnel\HyperPay\Contracts\HyperPay;
 use DigitalTunnel\HyperPay\Interfaces\PaymentReportInterface;
 use DigitalTunnel\HyperPay\Traits\Processor;
+use Exception;
 
 class TransactionReport extends HyperPay implements PaymentReportInterface
 {
@@ -65,16 +65,13 @@ class TransactionReport extends HyperPay implements PaymentReportInterface
      */
     private function response(array $response): array
     {
-        return [
-            'response' => $response,
-            'props' => [
-                'payment_method' => $this->config['payment_method'],
-                'test_mode' => $this->isTestMode,
-                'status' => [
-                    'success' => $this->validateStatus($response['result']['code']),
-                    'message' => $response['result']['description'],
-                ],
-            ],
+        $default = [
+            'payment_method' => $this->config['payment_method'],
+            'test_mode' => $this->isTestMode,
+            'success' => $this->validateStatus($response['result']['code']),
+            'message' => $response['result']['description'],
         ];
+
+        return collect($response)->merge($default)->toArray();
     }
 }

@@ -141,7 +141,7 @@ abstract class HyperPay
         );
 
         // unset Payment Method
-        Arr::forget($config, 'payment_method');
+        Arr::forget($config, ['payment_method', 'useFake']);
 
         return $config;
     }

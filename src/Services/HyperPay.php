@@ -6,6 +6,7 @@ use DigitalTunnel\HyperPay\Data\CustomerData;
 use DigitalTunnel\HyperPay\Enums\PaymentMethod;
 use DigitalTunnel\HyperPay\Exceptions\InvalidPaymentMethod;
 use Exception;
+use Illuminate\Support\Number;
 
 class HyperPay
 {
@@ -86,7 +87,7 @@ class HyperPay
      */
     public function setAmount(string $amount): self
     {
-        $this->amount = $amount;
+        $this->amount = Number::format($amount, maxPrecision: 2);
 
         return $this;
     }
@@ -132,7 +133,7 @@ class HyperPay
      */
     public function checkout(): array
     {
-        return (new PrepareCheckout(['payment_method' => $this->paymentMethod]) )
+        return (new PrepareCheckout(['payment_method' => $this->paymentMethod]))
             ->setTransactionId($this->transactionId)
             ->setAmount($this->amount)
             ->setCurrency($this->currency)
@@ -147,7 +148,7 @@ class HyperPay
      */
     public function checkoutWithTokenization(): array
     {
-        return (new PrepareCheckout(['payment_method' => $this->paymentMethod]) )
+        return (new PrepareCheckout(['payment_method' => $this->paymentMethod]))
             ->setTransactionId($this->transactionId)
             ->setAmount($this->amount)
             ->setCurrency($this->currency)
@@ -162,7 +163,7 @@ class HyperPay
      */
     public function oneClickCheckout(): array
     {
-        return (new PrepareCheckout(['payment_method' => $this->paymentMethod]) )
+        return (new PrepareCheckout(['payment_method' => $this->paymentMethod]))
             ->setTransactionId($this->transactionId)
             ->setAmount($this->amount)
             ->setCurrency($this->currency)
@@ -177,7 +178,7 @@ class HyperPay
      */
     public function getStatus(): array
     {
-        return (new PaymentStatus(['payment_method' => $this->paymentMethod]) )
+        return (new PaymentStatus(['payment_method' => $this->paymentMethod]))
             ->setCheckoutId($this->checkoutId)
             ->getStatus();
     }
@@ -189,7 +190,7 @@ class HyperPay
      */
     public function getTransactionReport(): array
     {
-        return (new TransactionReport(['payment_method' => $this->paymentMethod]) )
+        return (new TransactionReport(['payment_method' => $this->paymentMethod]))
             ->setCheckoutId($this->checkoutId)
             ->getTransactionReport();
     }
@@ -202,7 +203,7 @@ class HyperPay
      */
     public function getSettlement(): array
     {
-        return (new SettlementReport(['payment_method' => $this->paymentMethod]) )
+        return (new SettlementReport(['payment_method' => $this->paymentMethod]))
             ->setFromDate($this->fromDate)
             ->setToDate($this->toDate)
             ->getSettlement();
@@ -215,7 +216,7 @@ class HyperPay
      */
     public function refund(): array
     {
-        return (new Backoffice(['payment_method' => $this->paymentMethod]) )
+        return (new Backoffice(['payment_method' => $this->paymentMethod]))
             ->setAmount($this->amount)
             ->setCurrency($this->currency)
             ->setCheckoutId($this->checkoutId)
@@ -230,7 +231,7 @@ class HyperPay
      */
     public function reverse(): array
     {
-        return (new Backoffice(['payment_method' => $this->paymentMethod]) )
+        return (new Backoffice(['payment_method' => $this->paymentMethod]))
             ->setCheckoutId($this->checkoutId)
             ->processReverse();
 

@@ -23,7 +23,7 @@
     },
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^10.0|^11.0"
+        "laravel/framework": "^11.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -35,12 +35,12 @@
             "pestphp/pest-plugin": true
         }
     },
-    "require-dev": {
-        "orchestra/testbench": "^9.0",
-        "pestphp/pest": "^2.34"
-    },
+    "require-dev": {},
     "extra": {
         "laravel": {
+            "providers": [
+                "DigitalTunnel\\HyperPay\\Providers\\PackageServiceProvider"
+            ],
             "aliases": {
                 "HyperPay": "DigitalTunnel\\HyperPay\\Facades\\HyperPay"
             }
